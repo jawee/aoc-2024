@@ -21,8 +21,8 @@ func main() {
 		os.Exit(1)
 	}
 	defer file.Close()
-	// res := a(file)
-	res := b(file)
+	res := a(file)
+	// res := b(file)
 	fmt.Printf("%d\n", res)
 }
 
@@ -73,7 +73,7 @@ func a(file io.Reader) int {
 	left = sortSlice(left)
 	right = sortSlice(right)
 
-	for i := 0; i < len(left); i++ {
+	for i, _ := range left {
 		sum += abs(left[i], right[i])
 	}
 
