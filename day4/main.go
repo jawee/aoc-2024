@@ -10,9 +10,9 @@ import (
 
 func main() {
 	pwd, _ := os.Getwd()
-	file, err := os.Open(pwd + "/day4/atest.txt")
+	// file, err := os.Open(pwd + "/day4/atest.txt")
 	// file, err := os.Open(pwd + "/day4/btest.txt")
-	// file, err := os.Open(pwd + "/day4/input.txt")
+	file, err := os.Open(pwd + "/day4/input.txt")
 
 	if err != nil {
 		fmt.Println(err)
@@ -38,16 +38,11 @@ func b(file io.Reader) int {
 		i++
 	}
 
-	// for _, row := range matrix {
-	// 	fmt.Printf("%+v\n", row)
-	// }
-
 	for row := range matrix {
 		for col := range matrix[row] {
-			// fmt.Printf("%s", matrix[row][col])
 			if matrix[row][col] == "A" {
 				if searchMas(matrix, row, col) {
-					sum++;
+					sum++
 				}
 			}
 		}
@@ -125,19 +120,15 @@ func searchMas(matrix [][]string, row, col int) bool {
 		return false
 	}
 
-	if matrix[row-1][col-1] != "M" && matrix[row-1][col-1] != "S"  {
-		return false
+	topLeft := matrix[row-1][col-1]
+	topRight := matrix[row-1][col+1]
+	bottomLeft := matrix[row+1][col-1]
+	bottomRight := matrix[row+1][col+1]
+	if ((topLeft == "M" && bottomRight == "S") || (topLeft == "S" && bottomRight == "M")) && ((bottomLeft == "M" && topRight == "S") || (bottomLeft == "S" && topRight == "M")) {
+		return true
 	}
-	if matrix[row-1][col+1] != "M" && matrix[row-1][col+1] != "S"  {
-		return false
-	}
-	if matrix[row+1][col-1] != "M" && matrix[row+1][col-1] != "S"  {
-		return false
-	}
-	if matrix[row+1][col+1] != "M" && matrix[row+1][col+1] != "S"  {
-		return false
-	}
-	return true
+
+	return false
 }
 func searchWord(matrix [][]string, row, col, dx, dy int) bool {
 	if (col+(dx*3)) < 0 || (col+(dx*3)) >= len(matrix[0]) {
