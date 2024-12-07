@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -29,7 +30,18 @@ func a(file io.Reader) int {
 	sum := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		split := strings.Split(line, "")
+		split := strings.Split(line, ":")
+
+		wantedResult, err := strconv.Atoi(split[0])
+
+		numbersStr := strings.Split(strings.Trim(split[1], " "), " ")
+
+		numbers := []int{}
+		for _, v := range numbersStr {
+
+			val, _ := strconv.Atoi(v)
+			numbers = append(numbers, val)
+		}
 	}
 
 	return sum
