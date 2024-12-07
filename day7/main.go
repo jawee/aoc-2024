@@ -25,23 +25,23 @@ func main() {
 	fmt.Printf("%d\n", res)
 }
 
-func a(file io.Reader) uint64 {
+func a(file io.Reader) int {
 	scanner := bufio.NewScanner(file)
-	var sum uint64 = 0
+	sum := 0
 	for scanner.Scan() {
 		line := scanner.Text()
 		split := strings.Split(line, ":")
 
-		wantedResult, err := strconv.ParseUint(split[0], 10, 64)
+		wantedResult, err := strconv.Atoi(split[0])
 		if err != nil {
 			panic(err)
 		}
 
 		numbersStr := strings.Split(strings.Trim(split[1], " "), " ")
 
-		numbers := []uint64{}
+		numbers := []int{}
 		for _, v := range numbersStr {
-			val, err := strconv.ParseUint(v, 10, 64)
+			val, err := strconv.Atoi(v)
 			if err != nil {
 				panic(err)
 			}
@@ -49,76 +49,31 @@ func a(file io.Reader) uint64 {
 		}
 
 		if isValid(wantedResult, numbers) {
-			sum += uint64(wantedResult)
+			sum += wantedResult
 		}	
 	}
 
 	return sum
 }
 
-func createPossibleOperators(count int) [][]string {
-	possibleCombinations := [][]string{}
-	first := []string{}
-	last := []string{}
-	for _ = range count {
-		first = append(first, "+")
-		last = append(last, "*")
-	}
-	possibleCombinations = append(possibleCombinations, first)
-	for i := range count {
-		generated := deepCopy(first)
-		generated[i] = "*"
-		possibleCombinations = append(possibleCombinations, generated)
-		for j := range count {
-			if i == j {
-				continue
-			}
-			newGenerated := deepCopy(generated)
-			newGenerated[j] = "*"
-			possibleCombinations = append(possibleCombinations, newGenerated)
-		}
-	}
-	possibleCombinations = append(possibleCombinations, last)
-	return possibleCombinations
-}
-func deepCopy(a []string) []string {
-	new := []string{}
-	for _, v := range a {
-		new = append(new, v)
-	}
-	return new
+func isValid(wantedResult int, numbers []int) bool {
+	res := checkNext(wantedResult, numbers[0], numbers, 1) 
+
+	return res
 }
 
-func isValid(wantedResult uint64, numbers []uint64) bool {
-	// possibleCombinations := [][]string{
-	// 	{"+", "+"},
-	// 	{"*", "+"},
-	// 	{"*", "*"},
-	// 	{"+", "*"},
-	// }
-	possibleCombinations := createPossibleOperators(len(numbers)-1)
-
-	for _, operators := range possibleCombinations {
-		var sum uint64 = 1
-		fmt.Printf("Op: %+v\n", operators)
-		for i, v := range numbers {
-			fmt.Printf("%d: Handling %d\n", i, v)
-			if i == 0 {
-				sum *= uint64(v)
-				continue
-			}
-			if operators[i-1] == "+" {
-				sum += uint64(v)
-			}
-			if operators[i-1] == "*" {
-				sum *= uint64(v)
-			}
-		}
-
-		if sum == uint64(wantedResult) {
-			return true
-		}
+func checkNext(wantedResult int, current int, numbers []int, index int) bool {
+	if index == len(numbers) {
+		return current == wantedResult
 	}
 
-	return false
+	if checkNext(wantedResult, current+numbers[index], numbers, index+1) {
+		return true
+	}
+
+	if checkNext(wantedResult, current*numbers[index], numbers, index+1) {
+		return true
+	}
+
+	return false 
 }
