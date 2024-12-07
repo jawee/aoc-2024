@@ -11,9 +11,9 @@ import (
 
 func main() {
 	pwd, _ := os.Getwd()
-	file, err := os.Open(pwd + "/day7/atest.txt")
+	// file, err := os.Open(pwd + "/day7/atest.txt")
 	// file, err := os.Open(pwd + "/day7/btest.txt")
-	// file, err := os.Open(pwd + "/day7/input.txt")
+	file, err := os.Open(pwd + "/day7/input.txt")
 
 	if err != nil {
 		fmt.Println(err)
@@ -88,7 +88,7 @@ func b(file io.Reader) int {
 }
 
 func isValidB(wantedResult int, numbers []int) bool {
-	res := checkNextA(wantedResult, numbers[0], numbers, 1) 
+	res := checkNextB(wantedResult, numbers[0], numbers, 1) 
 
 	return res
 }
@@ -98,11 +98,16 @@ func checkNextB(wantedResult int, current int, numbers []int, index int) bool {
 		return current == wantedResult
 	}
 
-	if checkNextA(wantedResult, current+numbers[index], numbers, index+1) {
+	if checkNextB(wantedResult, current+numbers[index], numbers, index+1) {
 		return true
 	}
 
-	if checkNextA(wantedResult, current*numbers[index], numbers, index+1) {
+	if checkNextB(wantedResult, current*numbers[index], numbers, index+1) {
+		return true
+	}
+
+	current, _ = strconv.Atoi(fmt.Sprintf("%d%d", current, numbers[index]))
+	if checkNextB(wantedResult, current, numbers, index+1) {
 		return true
 	}
 
