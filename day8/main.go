@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -28,10 +27,36 @@ func main() {
 func a(file io.Reader) int {
 	scanner := bufio.NewScanner(file)
 	sum := 0
+	strs := [][]string{}
 	for scanner.Scan() {
 		line := scanner.Text()
-		split := strings.Split(line, ":")
+		split := strings.Split(line, "")
+		strs = append(strs, split)
+	}
+
+	for _, v := range strs {
+		fmt.Printf("%+v\n", v)
+	}
+
+	sum = countAntinodes(strs)
+
+	return sum
+}
+
+func countAntinodes(strs [][]string) int {
+	sum := 0
+	antiNodes := [][]bool{}
+	for range strs {
+		antiNodes = append(antiNodes, make([]bool, len(strs)))
+	}
+	for row := range strs {
+		for col := range strs[row] {
+			if strs[row][col] != "." {
+			}
+
+		}
 	}
 
 	return sum
 }
+
