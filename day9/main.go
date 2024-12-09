@@ -10,9 +10,9 @@ import (
 
 func main() {
 	pwd, _ := os.Getwd()
-	file, err := os.Open(pwd + "/day9/atest.txt")
+	// file, err := os.Open(pwd + "/day9/atest.txt")
 	// file, err := os.Open(pwd + "/day9/btest.txt")
-	// file, err := os.Open(pwd + "/day9/input.txt")
+	file, err := os.Open(pwd + "/day9/input.txt")
 
 	if err != nil {
 		fmt.Println(err)
@@ -60,6 +60,9 @@ func getCheckSum(input string) int {
 		if v == '.' {
 			var char rune
 			for j := len(str)-1; j > 0; j-- {
+				if j < i {
+					break
+				}
 				if str[j] != '.' {
 					char = rune(str[j])
 					str = replaceAtIndex(str, '.', j)
@@ -67,11 +70,15 @@ func getCheckSum(input string) int {
 				}
 			}
 			str = replaceAtIndex(str, char, i)
+			// fmt.Printf("%s\n", str)
 		}
 	}
-
-	fmt.Printf("%s\n", str)
-	return 0
+	sum := 0
+	for i, v := range str {
+		n, _ := strconv.Atoi(string(v))
+		sum += (i*n)
+	}
+	return sum
 }
 
 func replaceAtIndex(in string, r rune, i int) string {

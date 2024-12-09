@@ -5,9 +5,11 @@ import (
 ) 
 
 func Test1(t *testing.T) {
-	input := "12345"
+	input := "2333133121414131402"
 	
-	_ = getCheckSum(input)
+	res := getCheckSum(input)
 
-	t.Fatalf("Fail")
+	if 1928 != res {
+		t.Fatalf("Fail %d\n", res)
+	}
 }
