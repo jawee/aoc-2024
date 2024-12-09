@@ -37,13 +37,18 @@ func a(file io.Reader) int {
 	return sum
 }
 
+type block struct {
+	id int
+	empty bool
+}
+
 func getCheckSum(input string) int {
-	str := ""
+	structs := []block{}
 	for i := 0; i < len(input); i+=2 {
 		v := input[i]
 		no, _ := strconv.Atoi(string(v))
 		for range no {
-			str += fmt.Sprintf("%d", i/2)
+			structs = append(structs, block{id: i/2, empty: false})
 		}
 		if i+1 >= len(input) {
 			break
@@ -51,32 +56,40 @@ func getCheckSum(input string) int {
 		v = input[i+1]
 		no, _ = strconv.Atoi(string(v))
 		for range no {
-			str += "."
+			structs = append(structs, block{id: i/2, empty: true})
 		}
 	}
 
 	// resultStr := ""
-	for i, v := range str {
-		if v == '.' {
-			var char rune
-			for j := len(str)-1; j > 0; j-- {
+	for i, v := range structs {
+		if v.empty == true {
+			// var b block
+			for j := len(structs)-1; j > 0; j-- {
 				if j < i {
 					break
 				}
-				if str[j] != '.' {
-					char = rune(str[j])
-					str = replaceAtIndex(str, '.', j)
+				// if str[j] != '.' {
+				if !structs[j].empty {
+					// char = rune(str[j])
+					// str = replaceAtIndex(str, '.', j)
+					// b = structs[j]
+					structs[i], structs[j] = structs[j], structs[i]
+					// i[0], i[1] = i[1], i[0]
+					
+
 					break
 				}
 			}
-			str = replaceAtIndex(str, char, i)
+			// str = replaceAtIndex(str, char, i)
 			// fmt.Printf("%s\n", str)
 		}
 	}
 	sum := 0
-	for i, v := range str {
-		n, _ := strconv.Atoi(string(v))
-		sum += (i*n)
+	for i, v := range structs {
+		if v.empty {
+			continue
+		}
+		sum += (i*v.id)
 	}
 	return sum
 }

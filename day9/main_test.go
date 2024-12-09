@@ -10,7 +10,6 @@ func Test1(t *testing.T) {
 	res := getCheckSum(input)
 
 	if res != 60 {
-
 		t.Fatalf("Fail %d\n", res)
 	}
 }
