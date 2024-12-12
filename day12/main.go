@@ -86,7 +86,19 @@ func findFencingCostB(grid [][]string) int {
 }
 
 func calculateSides(v area) int {
+	if len(v.area) > 0 && len(v.area) < 3 {
+		return 4;
+	}
+	theMap := map[coordinate]bool{}
 	for _, v := range v.area {
+		theMap[v] = true
+	}
+
+	for k, v := range theMap {
+		top := theMap[coordinate{x: k.x, y: k.y-1}]
+		bottom := theMap[coordinate{x: k.x, y: k.y+1}]
+		left := theMap[coordinate{x: k.x-1, y: k.y}]
+		right := theMap[coordinate{x: k.x+1, y: k.y}]
 
 	}
 	return 0
