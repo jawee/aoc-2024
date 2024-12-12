@@ -45,9 +45,52 @@ type coordinate struct {
 
 type area struct {
 	letter string
-	area []coordinate
+	area   []coordinate
 }
 
+func findFencingCostB(grid [][]string) int {
+	areas := []area{}
+	visitedArea := [][]bool{}
+	for range grid {
+		visitedArea = append(visitedArea, make([]bool, len(grid[0])))
+	}
+
+	for row := range grid {
+		for col := range grid[row] {
+			if visitedArea[row][col] {
+				continue
+			}
+			letter := grid[row][col]
+			visited := []coordinate{}
+			queue := []coordinate{}
+			queue = append(queue, coordinate{x: col, y: row})
+
+			visited = floodFill(letter, queue, visited, grid)
+
+			for _, v := range visited {
+				visitedArea[v.y][v.x] = true
+			}
+
+			areas = append(areas, area{letter: letter, area: visited})
+		}
+	}
+
+	sum := 0
+	for _, v := range areas {
+		// fmt.Printf("Area %s: %d\n", k, len(v))
+		sides := calculateSides(v)
+		sum += (len(v.area) * sides)
+	}
+
+	return sum
+}
+
+func calculateSides(v area) int {
+	for _, v := range v.area {
+
+	}
+	return 0
+}
 func findFencingCost(grid [][]string) int {
 	areas := []area{}
 	visitedArea := [][]bool{}
@@ -66,7 +109,7 @@ func findFencingCost(grid [][]string) int {
 			queue = append(queue, coordinate{x: col, y: row})
 
 			visited = floodFill(letter, queue, visited, grid)
-			
+
 			for _, v := range visited {
 				visitedArea[v.y][v.x] = true
 			}

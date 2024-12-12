@@ -46,3 +46,13 @@ func Test3(t *testing.T) {
 		t.Fatalf("Expected 4, got %d\n", len(res))
 	}
 }
+
+func Test4(t *testing.T) {
+	input := area{letter: "A", area: []coordinate{{x: 0, y: 0}, {x: 1, y: 0}}}
+
+	res := calculateSides(input)
+
+	if res != 4 {
+		t.Fatalf("Expected 4, got %d\n", res)
+	}
+}
